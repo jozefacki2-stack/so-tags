@@ -1,0 +1,28 @@
+version: '3.9'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: TagsApi/Dockerfile
+    container_name: tagsapi
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Production"
+      ConnectionStrings__Default: "Data Source=/data/tags.db"
+    volumes:
+      - tagsdb:/data
+    ports:
+      - "5000:5000"
+
+  frontend:
+    build:
+      context: ./TagsWeb
+      dockerfile: Dockerfile
+    container_name: tagsWeb
+    ports:
+      - "8080:80"
+    depends_on:
+      - api
+
+volumes:
+  tagsdb:
