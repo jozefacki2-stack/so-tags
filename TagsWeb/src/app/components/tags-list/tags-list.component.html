@@ -1,0 +1,48 @@
+<mat-toolbar color="primary">
+  <span>Stack Overflow Tags</span>
+  <span class="spacer"></span>
+  <button mat-raised-button color="accent" (click)="refreshFromSO()">Odśwież</button>
+</mat-toolbar>
+
+<mat-card class="table-card">
+  <div class="table-header">
+    <h3>Lista tagów</h3>
+    <mat-progress-spinner
+      *ngIf="loading"
+      mode="indeterminate"
+      diameter="24"
+      class="spinner-inline">
+    </mat-progress-spinner>
+  </div>
+  <table mat-table [dataSource]="rows" matSort class="mat-elevation-z2">
+
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header="name">Tag</th>
+      <td mat-cell *matCellDef="let t">{{ t.name }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="count">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header="count">Liczba</th>
+      <td mat-cell *matCellDef="let t">{{ t.count }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="share">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header="share">Udział (%)</th>
+      <td mat-cell *matCellDef="let t">{{ t.share | number:'1.2-2' }}</td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="columns"></tr>
+    <tr mat-row *matRowDef="let row; columns: columns;"></tr>
+  </table>
+  <div *ngIf="!loading && rows.length === 0" class="empty">
+    Brak danych do wyświetlenia.
+  </div>
+</mat-card>
+
+<mat-paginator
+  [length]="totalItems"
+  [pageSize]="pageSize"
+  [pageIndex]="pageIndex"
+  [pageSizeOptions]="[5, 10, 25, 50]"
+  showFirstLastButtons>
+</mat-paginator>
